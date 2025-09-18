@@ -68,24 +68,61 @@ document.addEventListener('DOMContentLoaded', function() {
 // ===== YOUR CHALLENGE: IMPLEMENT THESE FUNCTIONS =====
 
 // TODO: Add keyboard event listener
-// document.addEventListener("keydown", (event) => {
-//     // Your code here!
-// });
+document.addEventListener("keydown", (event) => {
+    // Check if the game is over
+    if (!gameOver) {
+        // Convert response to uppercase
+        let response = event.key.toUpperCase();
+
+        // Checking if the input is a letter
+        if (/^[a-z]$/i.test(response)) {
+            addLetter(response);
+        } 
+        // Checking if the input is a backspace
+        else if (response === "BACKSPACE") {
+            deleteLetter();
+        }
+        // Checking if the input is an enter
+        else if (response === "ENTER") {
+            submitGuess();
+        }
+    }
+});
 
 // TODO: Implement addLetter function
-// function addLetter(letter) {
-//     // Your code here!
-// }
+function addLetter(letter) {
+    logDebug(`Adding letter ${letter}`, "Alert");
+
+    //Check if current row is full, if so then return early
+    if (currentTile >= 5){
+        logDebug("Row is full. Letter not added.", "Error");
+        return;
+    }
+    // Get the current row element fromr rows array
+    const rowElement = rows[currentRow];
+    // Get all tiles in the current row into an array
+    const tiles = rowElement.querySelectorAll('.tile');
+    // Get the specific tile from the row
+    const specificTile = tiles[currentTile];
+    // Set the tile's textContent to the letter
+    specificTile.textContent = letter;
+    // Add the 'filled' CSS class to the tile
+    specificTile.classList.add('filled');
+    // TODO: Increment currentTile by 1
+    currentTile += 1;
+
+    logDebug(`Successfully added letter, current tile is now ${currentTile}`, "Success");
+}
 
 // TODO: Implement deleteLetter function  
-// function deleteLetter() {
-//     // Your code here!
-// }
+function deleteLetter() {
+    logDebug("Deleting letter", "Alert");
+}
 
 // TODO: Implement submitGuess function
-// function submitGuess() {
-//     // Your code here!
-// }
+function submitGuess() {
+    logDebug("Submitting guess", "Alert");
+}
 
 // TODO: Implement checkGuess function (the hardest part!)
 // function checkGuess(guess, tiles) {
