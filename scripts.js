@@ -113,10 +113,34 @@ function addLetter(letter) {
 
     logDebug(`Successfully added letter, current tile is now ${currentTile}`, "Success");
 }
-
-// TODO: Implement deleteLetter function  
+  
 function deleteLetter() {
     logDebug("Deleting letter", "Alert");
+
+    //Check if current row has any letters, if there are none then return early
+    if (currentTile <= 0){
+        logDebug("Row is empty. Cannot delete.", "Error");
+        return;
+    }
+
+    // Incremeant current tile down
+    currentTile -= 1;
+
+    // Getting the correct tile to delete
+    const currentRowElement = rows[currentRow];
+    const tiles = currentRowElement.querySelectorAll('.tile');
+    const tileToDelete = tiles[currentTile];
+
+    // Get the letter before deleting it (for logging)
+    const letterBeingDeleted = tileToDelete.textContent;
+
+    // Clear the tile text and class
+    tileToDelete.textContent = ''; // empty string removes the letter
+    tileToDelete.classList.remove('filled'); // remove the styling class
+
+    // Log deletion
+    logDebug(`Successfully deleted ${letterBeingDeleted} from position ${currentTile}`, "Success");
+    logDebug(`Current word is ${getCurrentWord()}`, "Alert");
 }
 
 // TODO: Implement submitGuess function
