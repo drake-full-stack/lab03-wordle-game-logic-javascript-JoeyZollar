@@ -98,7 +98,7 @@ function addLetter(letter) {
         logDebug("Row is full. Letter not added.", "Error");
         return;
     }
-    // Get the current row element fromr rows array
+    // Get the current row element from rows array
     const rowElement = rows[currentRow];
     // Get all tiles in the current row into an array
     const tiles = rowElement.querySelectorAll('.tile');
@@ -184,8 +184,58 @@ function submitGuess() {
 
 // TODO: Implement checkGuess function (the hardest part!)
 function checkGuess(guess, tiles) {
-//     // Your code here!
-//     // Remember: handle duplicate letters correctly
-//     // Return the result array
-    logDebug(`Current guess is ${guess}`, "Alert");
+
+    // Split TARGET_WORD into an array
+    const target = TARGET_WORD.split("");
+    // Split guess into and array
+    const guessArray = guess.split("");
+    // Initial result array with all absents
+    const result = ['absent', 'absent', 'absent', 'absent', 'absent'];
+
+    logDebug(`Current guess is ${guessArray}. Checking guess to ${target}.`, "Alert");
+    
+    // Finding exact matches and nulling them
+    for (let i = 0; i < 5; i++) {
+        if (target[i] == guessArray[i]) {
+            result[i] = 'correct';
+            logDebug(`Changing ${target[i]} and ${guessArray[i]} as null.`, "Alert");
+            target[i] = null;
+            guessArray[i] = null;
+        }
+    }
+
+    logDebug(`The exact matches are ${result}.`, "Alert");
+
+    // Finding wrong position matches
+    for (let i = 0; i < 5; i++) {
+        if (guessArray[i] != null) { // only check unused letters
+            // Checking if guessArray[i] exists anywhere in the target
+            for (let j = 0; j < 5; j++) {
+                if (target[j] == guessArray[i] && target[j] != null) {
+                    result[i] = 'present';
+                    guessArray[i] = null;
+                }
+            }
+        }
+    }
+
+    logDebug(`The final result is ${result}.`, "Alert");
+
+    // Get the tiles from the current row
+    const currentTiles = rows[currentRow].querySelectorAll('.tile');
+
+    // Apply CSS classes to tiles
+    for (let i = 0; i < 5; i++) {
+        if (result[i] == "correct") {
+            tiles[i].classList.add('correct');
+        }
+        else if (result[i] == "present") {
+            tiles[i].classList.add('present');
+        }
+        else {
+            tiles[i].classList.add('absent');
+        }
+    }
+    
+    return result;
 }
